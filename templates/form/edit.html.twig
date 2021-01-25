@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Update{% endblock %}
+
+{% block body %}
+    <a class="btn btn-info" href="{{ path('client_list_viewer') }}">На главную</a>
+{% for message in app.flashes('info') %}
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-success text-center">
+                {{ message }}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h2 class="text-center">Изменение</h2>
+            {{ form_start(form) }}
+
+                {{ form_row(form.name) }}
+                {{ form_row(form.fname) }}
+                {{ form_row(form.phone) }}
+                {{ form_row(form.email) }}
+
+            <div class="col-sm-8 col-sm-offset-2" id="educations"
+                 data-prototype="{{ form_widget(form.educations.vars.prototype)|e('html_attr') }}">
+{#                <div class="card-deck">#}
+                    {% for row in form.educations %}
+                        <div class="card border-info mb-3" style="max-width: 18rem;">
+                            <div class="card-body">
+                                {{ form_row(row) }}
+                            </div>
+                        </div>
+                    {% endfor %}
+{#                </div>#}
+            </div>
+            {{ form_row(form.educations, {'label': ' '}) }}
+                {{ form_row(form.userDataProcessing) }}
+                {{ form_row(form.save, {'label': 'Изменить'}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // is the list
+        var $collectionHolder;
+        // the link on to add new items
+        var $addNewItem = $('<a href="#" class="btn btn-info">Add education</a>');
+
+        $(document).ready(function () {
+            $collectionHolder = $('#educations');
+            // append the add new item link in the collectionHolder
+            $collectionHolder.append($addNewItem);
+            $collectionHolder.data('index', $collectionHolder.find('.card').length)
+
+            $collectionHolder.find('.card').each(function () {
+                addRemoveButton($(this));
+            });
+        });
+
+        $addNewItem.click(function (e) {
+            e.preventDefault();
+            addNewForm();
+        })
+
+        function addNewForm() {
+            var prototype = $collectionHolder.data('prototype');
+            var index = $collectionHolder.data('index');
+            var newForm = prototype;
+            newForm = newForm.replace(/__name__/g, index);
+            $collectionHolder.data('index', index + 1);
+            var $panel = $('<div class="card border-info mb-3" style="max-width: 18rem;"><div class="card-header"></div></div>');
+            var $panelBody = $(' <div class="card-body"></div>').append(newForm);
+            $panel.append($panelBody);
+            addRemoveButton($panel);
+            $addNewItem.before($panel);
+        }
+
+
+
+        function addRemoveButton ($panel) {
+            var $removeButton = $('<a href="#" class="btn btn-danger">Remove</a>');
+            var $panelFooter = $('<div class="card-footer bg-transparent border-info"></div>').append($removeButton);
+
+            $removeButton.click(function (e) {
+                e.preventDefault();
+                $(e.target).parents('.card').remove();
+            });
+
+            $panel.append($panelFooter);
+        }
+
+    </script>
+{% endblock %}

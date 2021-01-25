@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detailed view{% endblock %}
+
+{% block body %}
+    <div class="row mt-5 mb-2">
+        <div class="col">
+            <div class="posts-panel-header d-flex align-items-center justify-content-around">
+                <h3 class="mb-0">Клиент {{ client.name }}</h3>
+                <div class="posts-panel-button">
+                    <a class="btn btn-info"
+                       href="{{ path('client_list_viewer') }}">На главную</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ client.name }} {{ client.fname }} </h5>
+                    <p class="card-text">tel: {{ client.phone }} </p>
+                    <p class="card-text">email: {{ client.email }} </p>
+                    {% for educ in client.educations %}
+                        {% if educ.education == 'Middle education' %}
+                            <p class="card-text">Среднее образование</p>
+                        {% elseif educ.education == 'Special education' %}
+                            <p class="card-text">Специальное образование</p>
+                        {% else %}
+                            <p class="card-text">Высшее образование</p>
+                        {% endif %}
+                    {% endfor %}
+                    {% if client.userDataProcessing == 1 %}
+                        <p class="card-text">Я даю свое согласние на обработку
+                            моих личных
+                            данных</p>
+                    {% else %}
+                        <p class="card-text">Я <b>Не</b> даю свое согласние на
+                            обработку моих
+                            личных данных</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Scoring: {{ client.scoring.balls }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
