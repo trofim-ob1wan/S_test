@@ -17,7 +17,7 @@ class CalculateScoring
         }
         $education = ["education" => array_sum(call_user_func_array('array_merge',$education))];
 
-        $result = array_sum(array_merge($email, $phone, $userDataProcessing, $education));
+        $result = array_merge($email, $phone, $userDataProcessing, $education);
 
         return $result;
     }

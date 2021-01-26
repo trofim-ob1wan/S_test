@@ -38,8 +38,8 @@ class ClientController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $scoring = $calculateScoring->scoring($client);
-
+            $data = $calculateScoring->scoring($client);
+            $scoring = array_sum($data);
             $store->save($client, $scoring);
 
             $this->addFlash(
@@ -94,9 +94,8 @@ class ClientController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $scoring = $calculateScoring->scoring($client);
-
+            $data = $calculateScoring->scoring($client);
+            $scoring = array_sum($data);
             $update->edit($client, $scoring, $educationCollection);
 
             $this->addFlash(
